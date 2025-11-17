@@ -30,9 +30,10 @@ while read -r line; do
         content=$(curl -s "$line")
         encodage=$(echo "$content" | grep -i "charset=" | head -n1 | grep -E -o "charset=.*" | cut -d= -f2 | tr -d '>"')
         if [ -z "$encodage" ]; then
-            encodage="Non spécifié"
+            encodage="-"
         fi
-        nb_mots=$(echo "$content" | wc -w)
+        
+        nb_mots=$(echo "$content" | lynx -stdin -dump 2>/dev/null | wc -w)
 
         echo "                    <tr><td>$lineno</td><td><a href=\"$line\">$line</a></td><td>$code</td><td>$encodage</td><td>$nb_mots</td></tr>" >> "$FICHIER_SORTIE"
 
